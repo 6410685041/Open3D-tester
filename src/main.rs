@@ -77,7 +77,7 @@ impl AreaEx {
 }
 
 fn main() {
-    if let Ok(mut pci) = read("data/kota_circuit3.ply") {
+    if let Ok(mut pci) = read("../data/kota_circuit3.ply") {
         proc2(&mut pci);
     }
 }
@@ -120,8 +120,10 @@ fn proc2(pci: &mut PointCloudInfo) {
     let mut conns = vec![Vec::<AdjPnt>::new(); pci.pntx.len()];
     for (_k, pcg) in &pci.grpm {
         let mut xks = vec![];
-        for xi in pcg.xi - 1..=(pcg.xi + 1) {
-            for yi in pcg.yi - 1..(pcg.yi + 1) {
+        // for xi in pcg.xi - 1..=(pcg.xi + 1) {
+        //     for yi in pcg.yi - 1..(pcg.yi + 1) {
+        for xi in pcg.xi.checked_sub(1).unwrap_or(0)..=(pcg.xi + 1) {
+            for yi in pcg.yi.checked_sub(1).unwrap_or(0)..=(pcg.yi + 1) {
                 let kx = yi * xcn + xi;
                 if let Some(_) = pci.grpm.get(&kx) {
                     xks.push(kx);
@@ -246,7 +248,7 @@ fn proc2(pci: &mut PointCloudInfo) {
             }
         }
     }
-    write("data/kota-3.ply", &pnts);
+    write("../data/kota-3.ply", &pnts);
     print!("FIN {}\n", cn);
 }
 
